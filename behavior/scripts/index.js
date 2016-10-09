@@ -41,9 +41,15 @@ const provideWeather = client.createStep({
   },
 
   prompt() {
-    // Need to provide weather
+    let weatherData = {
+      temperature: 60,
+      condition: 'sunny',
+      city: client.getConversationState().weatherCity.value,
+    }
+
+    client.addResponse('app:response:name:provide_weather/current', weatherData)
     client.done()
-  },
+  }
 })
 
 client.runFlow({
