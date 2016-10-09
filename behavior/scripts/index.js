@@ -1,6 +1,6 @@
 'use strict'
 
-const getCurrentWeather = require('./lib/getCurrentWeather.js')
+const getCurrentWeather = require('./lib/getCurrentWeather')
 
 const firstOfEntityRole = function(message, entity, role) {
   role = role || 'generic';
