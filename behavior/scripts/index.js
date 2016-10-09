@@ -2,46 +2,35 @@
 
 exports.handle = function handle(client) {
 
-  const sayHello = client.createStep({
-    satisfied() {
-      return Boolean(client.getConversationState().helloSent)
-    },
+const collectCity = client.createStep({
+  satisfied() {
+    return Boolean(client.getConversationState().weatherCity)
+  },
 
-    prompt() {
-      client.addResponse('app:response:name:welcome')
-      client.addResponse('app:response:name:provide/documentation', {
-        documentation_link: 'http://docs.init.ai',
-      })
-      client.addResponse('app:response:name:provide/instructions')
-      client.updateConversationState({
-        helloSent: true
-      })
-      client.done()
-    }
-  })
+  prompt() {
+    // Need to prompt user for city    
+    console.log('Need to ask user for city')
+    client.done()
+  },
+})
 
-  const untrained = client.createStep({
-    satisfied() {
-      return false
-    },
+const provideWeather = client.createStep({
+  satisfied() {
+    return false
+  },
 
-    prompt() {
-      client.addResponse('app:response:name:apology/untrained')
-      client.done()
-    }
-  })
+  prompt() {
+    // Need to provide weather
+    client.done()
+  },
+})
 
-  client.runFlow({
-    classifications: {
-			// map inbound message classifications to names of streams
-    },
-    autoResponses: {
-      // configure responses to be automatically sent as predicted by the machine learning model
-    },
-    streams: {
-      main: 'onboarding',
-      onboarding: [sayHello],
-      end: [untrained]
-    }
-  })
+client.runFlow({
+  classifications: {},
+  streams: {
+    main: 'getWeather',
+    getWeather: [collectCity, provideWeather],
+  }
+})
+  
 }
